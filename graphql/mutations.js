@@ -44,7 +44,7 @@ export const ADD_NEW_BOOKMARK = gql`
 `;
 
 export const REMOVE_BOOKMARK = gql`
-  mutation MyMutation($id: uuid) {
+  mutation MyMutation($id: uuid, $likesId: uuid) {
     delete_bookmarks(where: { id: { _eq: $id } }) {
       returning {
         id
@@ -59,6 +59,12 @@ export const REMOVE_BOOKMARK = gql`
         type
       }
       affected_rows
+    }
+    delete_likes(where: { id: { _eq: $likesId } }) {
+      returning {
+        id
+        likes
+      }
     }
   }
 `;
