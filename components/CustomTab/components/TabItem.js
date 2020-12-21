@@ -31,6 +31,8 @@ const TabItem = ({
 
   const toast = useToast();
 
+  const [isOpen, setIsOpen] = React.useState(false);
+
   const onClose = () => setIsOpen(false);
 
   const [removeABookmark] = useMutation(REMOVE_BOOKMARK, {
@@ -75,14 +77,15 @@ const TabItem = ({
     });
   };
 
-  const [isOpen, setIsOpen] = React.useState(false);
-
   const cancelRef = React.useRef();
 
   const dividerColor = useColorModeValue('#adafb5', '#191f33');
 
   const onDeleteHandler = () => {
-    removeABookmark({ variables: { id }, update: updateCache });
+    removeABookmark({
+      variables: { id, likesId: likes.id },
+      update: updateCache,
+    });
   };
 
   return (

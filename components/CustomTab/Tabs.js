@@ -55,8 +55,29 @@ const CustomTab = () => {
   });
   const toast = useToast();
 
+  const updateCache = (client, { data: { insert_bookmarks } }) => {
+    try {
+      const data = client.readQuery({
+        query: GET_ALL_BOOKMARKS,
+      });
+      const newBookmark = insert_bookmarks.returning[0];
+      const newData = {
+        bookmarks: [...data.bookmarks, newBookmark],
+      };
+      client.writeQuery({
+        query: GET_ALL_BOOKMARKS,
+        data: newData,
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const onAddHandler = ({ payload: { title, description, url, type } }) => {
-    addNewBookmark({ variables: { title, description, url, type } });
+    addNewBookmark({
+      variables: { title, description, url, type },
+      update: updateCache,
+    });
   };
 
   return (
