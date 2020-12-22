@@ -89,9 +89,6 @@ export const mapDataByMonth = (data) => {
 
   const sortedResult = sortData(result);
 
-  console.log(sortedResult);
-  console.log(result);
-
   return sortedResult;
 };
 
