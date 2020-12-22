@@ -50,7 +50,7 @@ const AddBookMarkModal = ({ isOpen, initialValues, onClose, onAdd, isLoading }) 
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={onClose} isCentered>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>Add new Bookmark</ModalHeader>
