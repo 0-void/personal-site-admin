@@ -16,7 +16,7 @@ import {
 
 import { Formik, Form, Field } from 'formik';
 
-const AddBookMarkModal = ({ isOpen, onClose, onAdd, isLoading }) => {
+const AddBookMarkModal = ({ isOpen, initialValues, onClose, onAdd, isLoading }) => {
   function validateTitle(value) {
     let error;
     if (!value) {
@@ -57,12 +57,7 @@ const AddBookMarkModal = ({ isOpen, onClose, onAdd, isLoading }) => {
         <ModalCloseButton />
         <ModalBody>
           <Formik
-            initialValues={{
-              title: '',
-              description: '',
-              url: '',
-              type: '',
-            }}
+            initialValues={initialValues}
             onSubmit={(values, actions) => {
               onAdd({ payload: values });
               // actions.setSubmitting(false);

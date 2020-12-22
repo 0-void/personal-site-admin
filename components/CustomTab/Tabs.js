@@ -88,6 +88,12 @@ const CustomTab = () => {
         isLoading={loading}
         onClose={onClose}
         onAdd={onAddHandler}
+        initialValues={{
+          title: '',
+          description: '',
+          url: '',
+          type: '',
+        }}
       />
       <TabList>
         <Tab fontWeight="600">

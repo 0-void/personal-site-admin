@@ -9,14 +9,19 @@ import {
   Text,
   useColorModeValue,
   IconButton,
-  useToast,
+  useDisclosure,
 } from '@chakra-ui/react';
 
-import { LIKE_THE_BOOKMARK, REMOVE_BOOKMARK } from '../../../graphql/mutations';
+import {
+  LIKE_THE_BOOKMARK,
+  REMOVE_BOOKMARK,
+  UPDATE_BOOKMARK,
+} from '../../../graphql/mutations';
 
 import { getIcon, getIconColor } from '../../../utils/index';
 import DeleteBookMarkModal from '../../DeleteBookmarkModal';
 import { GET_ALL_BOOKMARKS } from '../../../graphql/queries';
+import UpdateBookmark from '../../AddBookmarkModal';
 
 const TabItem = ({
   id,
@@ -26,18 +31,42 @@ const TabItem = ({
   description,
   type,
   isLastElement,
+  toast,
 }) => {
   const [likeTheBookmark] = useMutation(LIKE_THE_BOOKMARK);
 
-  const toast = useToast();
+  const [isModalOpen, setIsOpen] = React.useState(false);
 
-  const [isOpen, setIsOpen] = React.useState(false);
+  const onModalClose = () => setIsOpen(false);
 
-  const onClose = () => setIsOpen(false);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const [updateBookmark, { loading }] = useMutation(UPDATE_BOOKMARK, {
+    onCompleted() {
+      onClose();
+      toast({
+        title: 'Updated Bookmark!',
+        description: 'Updated Bookmark in the list successfully',
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+      });
+    },
+    onError() {
+      onClose();
+      toast({
+        title: 'Falied to update Bookmark!',
+        description: 'Something went wrong, when updating the bookmark',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
+    },
+  });
 
   const [removeABookmark] = useMutation(REMOVE_BOOKMARK, {
     onCompleted() {
-      onClose();
+      onModalClose();
       toast({
         title: 'Bookmark deleted!',
         description: 'Bookmark delete successfully form the list',
@@ -47,7 +76,7 @@ const TabItem = ({
       });
     },
     onError() {
-      onClose();
+      onModalClose();
       toast({
         title: 'Falied to delete bookmark!',
         description: 'Something went wrong, when deleting the bookmark',
@@ -77,6 +106,12 @@ const TabItem = ({
     });
   };
 
+  const onUpdateHandler =  ({ payload: { title, description, url, type } }) => {
+    updateBookmark({
+      variables: { title, description, url, type, id },
+    });
+  };
+
   const cancelRef = React.useRef();
 
   const dividerColor = useColorModeValue('#adafb5', '#191f33');
@@ -90,12 +125,25 @@ const TabItem = ({
 
   return (
     <Flex marginBottom="8px">
+      <UpdateBookmark
+        onOpen={onOpen}
+        isOpen={isOpen}
+        isLoading={loading}
+        onClose={onClose}
+        onAdd={onUpdateHandler}
+        initialValues={{
+          title,
+          description,
+          url,
+          type,
+        }}
+      />
       <DeleteBookMarkModal
         title={title}
         description="Are you sure? You can't undo this action afterwards."
         onDelete={onDeleteHandler}
-        onClose={onClose}
-        isOpen={isOpen}
+        onClose={onModalClose}
+        isOpen={isModalOpen}
         cancelRef={cancelRef}
       />
       <Flex flexDirection="column" alignItems="center">
@@ -150,7 +198,7 @@ const TabItem = ({
         </Flex>
         <Flex mt="8px">
           <IconButton>
-            <EditIcon />
+            <EditIcon onClick={onOpen}/>
           </IconButton>
           <IconButton ml="8px" onClick={() => setIsOpen(true)}>
             <DeleteIcon />

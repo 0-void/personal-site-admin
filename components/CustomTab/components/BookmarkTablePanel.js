@@ -1,4 +1,4 @@
-import { Center, Spinner, Text } from '@chakra-ui/react';
+import {useToast, Center, Spinner, Text } from '@chakra-ui/react';
 import { useQuery } from '@apollo/client';
 import TabItem from './TabItem';
 
@@ -6,6 +6,8 @@ const isLastElement = (array, index) => array.length - 1 !== index;
 
 const BookmarkTablePanel = ({ icon, query }) => {
   const { loading, data } = useQuery(query);
+
+  const toast = useToast();
 
   return (
     <>
@@ -25,6 +27,7 @@ const BookmarkTablePanel = ({ icon, query }) => {
               isLastElement: isLastElement(data.bookmarks, index),
               icon,
               id,
+              toast: (props) => toast(props)
             };
             return <TabItem {...props} key={id} />;
           }

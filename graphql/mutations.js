@@ -43,6 +43,31 @@ export const ADD_NEW_BOOKMARK = gql`
   }
 `;
 
+export const UPDATE_BOOKMARK = gql`
+  mutation MyMutation(
+    $description: String
+    $title: String
+    $url: String
+    $type: String
+    $id: uuid
+  ) {
+    update_bookmarks(_set: {description: $description, type: $type, url: $url}, where: {id: {_eq: $id}}) {
+      returning {
+        url
+        type
+        title
+        likes {
+          id
+          likes
+        }
+        description
+        id
+        last_updated
+      }
+    }
+  }
+`;
+
 export const REMOVE_BOOKMARK = gql`
   mutation MyMutation($id: uuid, $likesId: uuid) {
     delete_bookmarks(where: { id: { _eq: $id } }) {
