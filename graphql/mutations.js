@@ -51,7 +51,10 @@ export const UPDATE_BOOKMARK = gql`
     $type: String
     $id: uuid
   ) {
-    update_bookmarks(_set: {description: $description, type: $type, url: $url}, where: {id: {_eq: $id}}) {
+    update_bookmarks(
+      _set: { description: $description, type: $type, url: $url }
+      where: { id: { _eq: $id } }
+    ) {
       returning {
         url
         type
@@ -89,6 +92,37 @@ export const REMOVE_BOOKMARK = gql`
       returning {
         id
         likes
+      }
+    }
+  }
+`;
+
+export const REMOVE_TIMELINE = gql`
+  mutation MyMutation($id: uuid, $postId: uuid) {
+    delete_timeline(where: { id: { _eq: $id } }) {
+      returning {
+        type
+        twitter
+        title
+        post {
+          description
+          id
+          postUrl
+          title
+        }
+        last_modified
+        imageUrl
+        date
+        description
+        id
+      }
+    }
+    delete_post(where: { id: { _eq: $postId } }) {
+      returning {
+        title
+        postUrl
+        id
+        description
       }
     }
   }

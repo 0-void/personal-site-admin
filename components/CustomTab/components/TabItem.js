@@ -19,7 +19,7 @@ import {
 } from '../../../graphql/mutations';
 
 import { getIcon, getIconColor } from '../../../utils/index';
-import DeleteBookMarkModal from '../../DeleteBookmarkModal';
+import DeleteBookMarkModal from '../../CustomPopUpModal';
 import { GET_ALL_BOOKMARKS } from '../../../graphql/queries';
 import UpdateBookmark from '../../AddBookmarkModal';
 
@@ -139,7 +139,7 @@ const TabItem = ({
         }}
       />
       <DeleteBookMarkModal
-        title={title}
+        title={'Bookmark'}
         description="Are you sure? You can't undo this action afterwards."
         onDelete={onDeleteHandler}
         onClose={onModalClose}

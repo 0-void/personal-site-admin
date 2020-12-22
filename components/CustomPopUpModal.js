@@ -8,7 +8,7 @@ import {
   AlertDialogOverlay,
 } from '@chakra-ui/react';
 
-function DeleteBookMarkModal({ isOpen, onClose, cancelRef, onDelete }) {
+function CustomPopUpModal({title, isOpen, onClose, cancelRef, onDelete }) {
   return (
     <AlertDialog
       isOpen={isOpen}
@@ -18,7 +18,7 @@ function DeleteBookMarkModal({ isOpen, onClose, cancelRef, onDelete }) {
       <AlertDialogOverlay>
         <AlertDialogContent>
           <AlertDialogHeader fontSize="lg" fontWeight="bold">
-            Delete Bookmark
+            Delete {title}
           </AlertDialogHeader>
 
           <AlertDialogBody>
@@ -39,4 +39,4 @@ function DeleteBookMarkModal({ isOpen, onClose, cancelRef, onDelete }) {
   );
 }
 
-export default DeleteBookMarkModal;
+export default CustomPopUpModal;
